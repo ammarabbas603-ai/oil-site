@@ -2,109 +2,160 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>دليل مواصفات المركبات</title>
+<title>دليل زيوت السيارات</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body{
-  font-family:tahoma;
+  font-family:Tahoma;
   direction:rtl;
-  background:#f4f4f4;
+  background:linear-gradient(#eef2f3,#d9e2ec);
   padding:20px;
+}
+.container{
+  max-width:420px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+h2{
+  text-align:center;
+  color:#2c3e50;
 }
 select{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:15px;
 }
-.box{
-  background:#fff;
+.result{
+  background:#f8f9fa;
+  margin-top:15px;
   padding:15px;
   border-radius:8px;
-  margin-top:15px;
+  font-size:15px;
+  line-height:1.7;
 }
-h2{text-align:center}
+.label{
+  color:#555;
+}
+.value{
+  font-weight:bold;
+  color:#27ae60;
+}
 </style>
 </head>
 <body>
 
-<h2>دليل المواصفات</h2>
-
-<select id="category" onchange="loadBrands()">
-  <option value="">اختر الفئة</option>
-</select>
+<div class="container">
+<h2>دليل زيوت السيارات</h2>
 
 <select id="brand" onchange="loadModels()">
-  <option value="">اختر الشركة</option>
+<option value="">اختر الشركة</option>
 </select>
 
 <select id="model" onchange="loadYears()">
-  <option value="">اختر الموديل</option>
+<option value="">اختر الموديل</option>
 </select>
 
-<select id="year" onchange="showSpecs()">
-  <option value="">اختر سنة الصنع</option>
+<select id="year" onchange="showOil()">
+<option value="">اختر سنة الصنع</option>
 </select>
 
-<div class="box" id="specs">
-اختر البيانات لعرض المواصفات
+<div class="result" id="result">
+اختر البيانات لعرض القياسات
+</div>
 </div>
 
 <script>
-const data = {
- "سيارات":{
-  "تويوتا":{
-   "كورولا":{
-    "2020":"زيت 5W-30 | محرك 1.6 | بنزين",
-    "2021":"زيت 5W-30 | محرك 1.6 | بنزين"
-   },
-   "كامري":{
-    "2020":"زيت 5W-30 | محرك 2.5",
-    "2022":"زيت 5W-30 | محرك 2.5"
-   }
+const db = {
+ "تويوتا":{
+  "كورولا":{
+   "2018":oil("5W-30","4 لتر"),
+   "2020":oil("5W-30","4 لتر")
   },
-  "نيسان":{
-   "التيما":{
-    "2019":"زيت 5W-30 | محرك 2.5",
-    "2021":"زيت 5W-30 | محرك 2.5"
-   }
+  "كامري":{
+   "2019":oil("5W-30","4.5 لتر"),
+   "2022":oil("5W-30","4.5 لتر")
+  }
+ },
+ "نيسان":{
+  "التيما":{
+   "2019":oil("5W-30","4.2 لتر"),
+   "2021":oil("5W-30","4.2 لتر")
+  },
+  "باترول":{
+   "2020":oil("10W-40","6.5 لتر")
+  }
+ },
+ "هيونداي":{
+  "إلنترا":{
+   "2020":oil("5W-30","4 لتر"),
+   "2022":oil("5W-30","4 لتر")
+  },
+  "سوناتا":{
+   "2021":oil("5W-30","4.8 لتر")
+  }
+ },
+ "كيا":{
+  "سيراتو":{
+   "2019":oil("5W-30","4 لتر"),
+   "2022":oil("5W-30","4 لتر")
+  }
+ },
+ "مرسيدس":{
+  "C200":{
+   "2020":oil("5W-40","5 لتر")
+  }
+ },
+ "BMW":{
+  "320":{
+   "2019":oil("5W-30","5 لتر")
   }
  }
 };
 
-const cat = document.getElementById("category");
+function oil(type,capacity){
+ return {
+  type:type,
+  capacity:capacity
+ };
+}
+
 const brand = document.getElementById("brand");
 const model = document.getElementById("model");
 const year = document.getElementById("year");
-const specs = document.getElementById("specs");
+const result = document.getElementById("result");
 
-Object.keys(data).forEach(c=>{
- cat.add(new Option(c,c));
+Object.keys(db).forEach(b=>{
+ brand.add(new Option(b,b));
 });
-
-function loadBrands(){
- brand.length=1; model.length=1; year.length=1;
- Object.keys(data[cat.value]).forEach(b=>{
-  brand.add(new Option(b,b));
- });
-}
 
 function loadModels(){
  model.length=1; year.length=1;
- Object.keys(data[cat.value][brand.value]).forEach(m=>{
+ Object.keys(db[brand.value]).forEach(m=>{
   model.add(new Option(m,m));
  });
+ result.innerHTML="اختر الموديل";
 }
 
 function loadYears(){
  year.length=1;
- Object.keys(data[cat.value][brand.value][model.value]).forEach(y=>{
+ Object.keys(db[brand.value][model.value]).forEach(y=>{
   year.add(new Option(y,y));
  });
+ result.innerHTML="اختر سنة الصنع";
 }
 
-function showSpecs(){
- specs.innerHTML = 
- data[cat.value][brand.value][model.value][year.value];
+function showOil(){
+ let o = db[brand.value][model.value][year.value];
+ result.innerHTML = `
+ <div><span class="label">نوع الزيت:</span> <span class="value">${o.type}</span></div>
+ <div><span class="label">سعة الزيت:</span> <span class="value">${o.capacity}</span></div>
+ `;
 }
 </script>
 
