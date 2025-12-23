@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>دليل مواصفات المركبات</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+  font-family:tahoma;
+  direction:rtl;
+  background:#f4f4f4;
+  padding:20px;
+}
+select{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+}
+.box{
+  background:#fff;
+  padding:15px;
+  border-radius:8px;
+  margin-top:15px;
+}
+h2{text-align:center}
+</style>
+</head>
+<body>
+
+<h2>دليل المواصفات</h2>
+
+<select id="category" onchange="loadBrands()">
+  <option value="">اختر الفئة</option>
+</select>
+
+<select id="brand" onchange="loadModels()">
+  <option value="">اختر الشركة</option>
+</select>
+
+<select id="model" onchange="loadYears()">
+  <option value="">اختر الموديل</option>
+</select>
+
+<select id="year" onchange="showSpecs()">
+  <option value="">اختر سنة الصنع</option>
+</select>
+
+<div class="box" id="specs">
+اختر البيانات لعرض المواصفات
+</div>
+
+<script>
+const data = {
+ "سيارات":{
+  "تويوتا":{
+   "كورولا":{
+    "2020":"زيت 5W-30 | محرك 1.6 | بنزين",
+    "2021":"زيت 5W-30 | محرك 1.6 | بنزين"
+   },
+   "كامري":{
+    "2020":"زيت 5W-30 | محرك 2.5",
+    "2022":"زيت 5W-30 | محرك 2.5"
+   }
+  },
+  "نيسان":{
+   "التيما":{
+    "2019":"زيت 5W-30 | محرك 2.5",
+    "2021":"زيت 5W-30 | محرك 2.5"
+   }
+  }
+ }
+};
+
+const cat = document.getElementById("category");
+const brand = document.getElementById("brand");
+const model = document.getElementById("model");
+const year = document.getElementById("year");
+const specs = document.getElementById("specs");
+
+Object.keys(data).forEach(c=>{
+ cat.add(new Option(c,c));
+});
+
+function loadBrands(){
+ brand.length=1; model.length=1; year.length=1;
+ Object.keys(data[cat.value]).forEach(b=>{
+  brand.add(new Option(b,b));
+ });
+}
+
+function loadModels(){
+ model.length=1; year.length=1;
+ Object.keys(data[cat.value][brand.value]).forEach(m=>{
+  model.add(new Option(m,m));
+ });
+}
+
+function loadYears(){
+ year.length=1;
+ Object.keys(data[cat.value][brand.value][model.value]).forEach(y=>{
+  year.add(new Option(y,y));
+ });
+}
+
+function showSpecs(){
+ specs.innerHTML = 
+ data[cat.value][brand.value][model.value][year.value];
+}
+</script>
+
+</body>
+</html>
 
